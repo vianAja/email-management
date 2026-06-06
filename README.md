@@ -42,6 +42,12 @@ Arti masing-masing:
 - `APP_BASE_URL`: URL frontend utama aplikasi
 - `REDIRECT_URL`: callback Google OAuth
 
+Catatan:
+
+- `SESSION_SECRET` tetap direkomendasikan.
+- Jika `SESSION_SECRET` belum diisi, aplikasi sekarang akan fallback ke `CLIENT_SECRET` agar deployment tidak langsung gagal.
+- Untuk production jangka panjang, tetap lebih baik memakai `SESSION_SECRET` terpisah.
+
 ## Setting untuk Local
 
 ```env
