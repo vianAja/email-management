@@ -1,0 +1,22 @@
+services:
+  gmail-manager:
+    build: .
+    container_name: gmail-manager
+    env_file:
+      - .env
+    ports:
+      - "${APP_HOST_PORT:-9000}:9000"
+    restart: unless-stopped
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    command:
+      - "http"
+      - "gmail-manager:9000"
+      - "--log"
+      - "stdout"
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTH}
+    depends_on:
+      - gmail-manager
