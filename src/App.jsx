@@ -46,49 +46,75 @@ function LegalPage({ title, children }) {
 function PublicLanding({ onLogin, error, notice }) {
   return (
     <main className="public-shell">
-      <section className="public-hero">
-        <div className="public-card public-card-hero">
-          <div className="public-eyebrow">Google Workspace Companion</div>
-          <h1 className="public-title">{APP_NAME}</h1>
-          <p className="public-lead">
-            Aplikasi ini membantu pemilik akun Gmail membaca, memfilter, dan meninjau email
-            langsung dari dashboard berbasis web dengan login Google yang aman.
+      <section className="auth-layout">
+        <div className="auth-brand-panel">
+          <div className="auth-badge">Google OAuth Enabled</div>
+          <h1 className="auth-brand-title">{APP_NAME}</h1>
+          <p className="auth-brand-copy">
+            Dashboard email untuk membaca, meninjau, dan mengelola inbox Gmail melalui
+            Gmail API resmi Google dengan otorisasi akun yang aman.
           </p>
 
-          <div className="public-bullets">
-            <div className="public-bullet">Membaca inbox Gmail melalui Gmail API resmi Google.</div>
-            <div className="public-bullet">Menampilkan ringkasan kategori seperti inbox, promo, sosial, dan spam.</div>
-            <div className="public-bullet">Digunakan untuk manajemen email pribadi atau operasional kerja.</div>
+          <div className="auth-feature-list">
+            <div className="auth-feature-item">
+              <span className="auth-feature-dot" />
+              <span>Menampilkan inbox Gmail dan kategori email secara terstruktur.</span>
+            </div>
+            <div className="auth-feature-item">
+              <span className="auth-feature-dot" />
+              <span>Dipakai untuk kebutuhan manajemen email pribadi atau operasional kerja.</span>
+            </div>
+            <div className="auth-feature-item">
+              <span className="auth-feature-dot" />
+              <span>Menggunakan login Google dan permission sesuai scope Gmail API.</span>
+            </div>
           </div>
 
-          <div className="public-actions">
-            <button className="public-login-btn" onClick={onLogin}>Lanjutkan Connect Akun Email</button>
-            <a className="public-link-btn" href="/privacy">Privacy Policy</a>
-            <a className="public-link-btn" href="/terms">Terms of Service</a>
+          <div className="auth-brand-footer">
+            <div>
+              <div className="auth-footer-label">Developer Contact</div>
+              <div className="auth-footer-value">{SUPPORT_EMAIL}</div>
+            </div>
+            <div>
+              <div className="auth-footer-label">Application Domain</div>
+              <div className="auth-footer-value">email.najwan.my.id</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="auth-card">
+          <div className="auth-logo-row">
+            <div className="auth-logo-mark">E</div>
+            <div>
+              <div className="auth-logo-title">{APP_NAME}</div>
+              <div className="auth-logo-subtitle">Secure Google Account Connection</div>
+            </div>
           </div>
 
-          <div className="public-meta">
-            <span>Developer contact: {SUPPORT_EMAIL}</span>
-            <span>Domain aplikasi: email.najwan.my.id</span>
+          <div className="auth-card-copy">
+            <h2>Masuk untuk melanjutkan</h2>
+            <p>
+              Hubungkan akun Google Anda untuk membuka dashboard email dan meninjau inbox
+              dengan izin akses yang Anda setujui sendiri.
+            </p>
+          </div>
+
+          <button className="auth-google-button" onClick={onLogin}>
+            <span className="auth-google-glyph" aria-hidden="true">G</span>
+            <span>Lanjutkan dengan Google</span>
+          </button>
+
+          <div className="auth-helper-copy">
+            Dengan melanjutkan, Anda akan diarahkan ke Google untuk proses login dan consent.
+          </div>
+
+          <div className="auth-link-row">
+            <a className="auth-inline-link" href="/privacy">Privacy Policy</a>
+            <a className="auth-inline-link" href="/terms">Terms of Service</a>
           </div>
 
           {notice && <div className="public-notice success">{notice}</div>}
           {error && <div className="public-notice error">{error}</div>}
-        </div>
-
-        <div className="public-card public-card-side">
-          <h2>Mengapa Google review meminta perubahan?</h2>
-          <p>
-            Google ingin homepage aplikasi menjelaskan tujuan app, menampilkan nama yang sama
-            dengan OAuth consent screen, dan menyediakan tautan kebijakan yang jelas untuk user.
-          </p>
-
-          <div className="review-checklist">
-            <div>Nama aplikasi di website: <strong>{APP_NAME}</strong></div>
-            <div>Fungsi aplikasi: dashboard pengelolaan email Gmail</div>
-            <div>Data yang diakses: email user melalui Gmail API</div>
-            <div>Kontak developer: {SUPPORT_EMAIL}</div>
-          </div>
         </div>
       </section>
     </main>
