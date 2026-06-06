@@ -104,6 +104,28 @@ Kalau Anda juga ingin menyimpan fallback domain Vercel bawaan, Anda boleh tambah
 
 Tetapi untuk penggunaan utama, saya sarankan fokus ke domain custom saja agar `APP_BASE_URL` dan `REDIRECT_URL` konsisten.
 
+## Verifikasi Domain untuk Google OAuth Branding
+
+Kalau Google menampilkan error seperti homepage URL `is not registered to you`, yang dibutuhkan bukan mengaktifkan `Search Console API`.
+
+Yang benar:
+
+1. Buka `Google Search Console` di browser:
+   - `https://search.google.com/search-console/about`
+2. Klik `Start now`
+3. Login dengan akun Google yang sama
+4. Tambahkan property:
+   - paling aman: `Domain property` untuk `najwan.my.id`
+   - alternatif: `URL-prefix property` untuk `https://email.najwan.my.id`
+5. Lakukan verifikasi ownership, biasanya dengan `DNS TXT record`
+6. Setelah status verified, kembali ke `OAuth consent screen` dan submit ulang branding verification
+
+Catatan penting:
+
+- `Google Search Console` berbeda dengan halaman `APIs & Services` di Google Cloud Console
+- hasil pencarian `google search console` di Cloud Console sering menampilkan `Google Search Console API`, tetapi itu bukan halaman untuk verifikasi domain
+- Anda tidak perlu enable API itu hanya untuk menyelesaikan error branding verification
+
 ## Rekomendasi Env di Vercel
 
 Untuk environment `Production`:
