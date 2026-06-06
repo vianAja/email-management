@@ -200,6 +200,21 @@ Untuk mengambil "semua email", SSO saja tidak cukup. Yang dibutuhkan adalah:
 
 Jadi Anda tidak perlu API pihak ketiga lain, tetapi tetap perlu Gmail API dengan scope yang sesuai.
 
+## Catatan Service Account
+
+File `service_account.json` tidak bisa menggantikan login user Gmail biasa untuk akun personal `@gmail.com`.
+
+Service Account hanya cocok untuk:
+
+- server-to-server access milik project sendiri
+- Google Workspace dengan domain-wide delegation yang dikonfigurasi admin
+
+Untuk membaca inbox Gmail milik user personal, tetap harus memakai:
+
+1. OAuth consent user
+2. Gmail API
+3. scope Gmail yang sesuai
+
 ## Referensi Resmi
 
 - Vite on Vercel: `https://vercel.com/docs/frameworks/frontend/vite`
