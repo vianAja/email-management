@@ -24,7 +24,7 @@ export default function Sidebar({
       {/* Logo */}
       <div className="sidebar-logo">
         <div className="logo-icon">📧</div>
-        <div className="logo-text">Gmail<span>Manager</span></div>
+        <div className="logo-text">E-Manage<span>vian</span></div>
       </div>
 
       {/* Navigation */}

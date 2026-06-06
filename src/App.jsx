@@ -6,6 +6,8 @@ import CategoryChart from './components/CategoryChart';
 import EmailList from './components/EmailList';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+const APP_NAME = 'E-Manage vian';
+const SUPPORT_EMAIL = 'najwanoctavian@gmail.com';
 
 const AUTH_ERROR_MESSAGES = {
   session_missing: 'Sesi login tidak ditemukan. Ulangi proses login dari aplikasi ini.',
@@ -28,6 +30,71 @@ const apiFetch = async (path, options = {}) => {
   return response;
 };
 
+function LegalPage({ title, children }) {
+  return (
+    <main className="public-shell legal-shell">
+      <div className="public-card legal-card">
+        <a className="public-back-link" href="/">Kembali ke beranda</a>
+        <div className="public-eyebrow">{APP_NAME}</div>
+        <h1 className="public-title">{title}</h1>
+        <div className="legal-copy">{children}</div>
+      </div>
+    </main>
+  );
+}
+
+function PublicLanding({ onLogin, error, notice }) {
+  return (
+    <main className="public-shell">
+      <section className="public-hero">
+        <div className="public-card public-card-hero">
+          <div className="public-eyebrow">Google Workspace Companion</div>
+          <h1 className="public-title">{APP_NAME}</h1>
+          <p className="public-lead">
+            Aplikasi ini membantu pemilik akun Gmail membaca, memfilter, dan meninjau email
+            langsung dari dashboard berbasis web dengan login Google yang aman.
+          </p>
+
+          <div className="public-bullets">
+            <div className="public-bullet">Membaca inbox Gmail melalui Gmail API resmi Google.</div>
+            <div className="public-bullet">Menampilkan ringkasan kategori seperti inbox, promo, sosial, dan spam.</div>
+            <div className="public-bullet">Digunakan untuk manajemen email pribadi atau operasional kerja.</div>
+          </div>
+
+          <div className="public-actions">
+            <button className="public-login-btn" onClick={onLogin}>Lanjutkan Connect Akun Email</button>
+            <a className="public-link-btn" href="/privacy">Privacy Policy</a>
+            <a className="public-link-btn" href="/terms">Terms of Service</a>
+          </div>
+
+          <div className="public-meta">
+            <span>Developer contact: {SUPPORT_EMAIL}</span>
+            <span>Domain aplikasi: email.najwan.my.id</span>
+          </div>
+
+          {notice && <div className="public-notice success">{notice}</div>}
+          {error && <div className="public-notice error">{error}</div>}
+        </div>
+
+        <div className="public-card public-card-side">
+          <h2>Mengapa Google review meminta perubahan?</h2>
+          <p>
+            Google ingin homepage aplikasi menjelaskan tujuan app, menampilkan nama yang sama
+            dengan OAuth consent screen, dan menyediakan tautan kebijakan yang jelas untuk user.
+          </p>
+
+          <div className="review-checklist">
+            <div>Nama aplikasi di website: <strong>{APP_NAME}</strong></div>
+            <div>Fungsi aplikasi: dashboard pengelolaan email Gmail</div>
+            <div>Data yang diakses: email user melalui Gmail API</div>
+            <div>Kontak developer: {SUPPORT_EMAIL}</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
 function App() {
   const [emails, setEmails] = useState([]);
   const [user, setUser] = useState(null);
@@ -37,6 +104,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const currentPath = window.location.pathname;
 
   const resetInboxState = () => {
     setEmails([]);
@@ -73,6 +141,11 @@ function App() {
 
   useEffect(() => {
     const loadInitialState = async () => {
+      if (currentPath === '/privacy' || currentPath === '/terms') {
+        setLoading(false);
+        return;
+      }
+
       setLoading(true);
       setError(null);
 
@@ -132,7 +205,21 @@ function App() {
     }
 
     loadInitialState();
-  }, []);
+  }, [currentPath]);
+
+  useEffect(() => {
+    if (currentPath === '/privacy') {
+      document.title = `Privacy Policy | ${APP_NAME}`;
+      return;
+    }
+
+    if (currentPath === '/terms') {
+      document.title = `Terms of Service | ${APP_NAME}`;
+      return;
+    }
+
+    document.title = isAuthenticated ? `${APP_NAME} Dashboard` : APP_NAME;
+  }, [currentPath, isAuthenticated]);
 
   const handleLogin = async () => {
     setError(null);
@@ -205,6 +292,49 @@ function App() {
 
   const isDashboard = activeCategory === 'all' && !searchQuery;
 
+  if (currentPath === '/privacy') {
+    return (
+      <LegalPage title="Privacy Policy">
+        <p>
+          E-Manage vian menggunakan login Google dan Gmail API untuk membantu pengguna membaca
+          serta meninjau email mereka melalui dashboard web.
+        </p>
+        <p>
+          Aplikasi ini hanya menggunakan data Gmail untuk kebutuhan tampilan inbox, kategori email,
+          dan status akun yang sedang login. Aplikasi tidak menjual data pengguna ke pihak ketiga.
+        </p>
+        <p>
+          Jika Anda ingin meminta penghapusan akses, cabut izin aplikasi ini dari halaman Google
+          Account Permissions atau hubungi developer di {SUPPORT_EMAIL}.
+        </p>
+      </LegalPage>
+    );
+  }
+
+  if (currentPath === '/terms') {
+    return (
+      <LegalPage title="Terms of Service">
+        <p>
+          E-Manage vian disediakan untuk membantu pengguna mengelola email Gmail mereka melalui
+          antarmuka dashboard berbasis web.
+        </p>
+        <p>
+          Dengan menggunakan aplikasi ini, Anda menyetujui bahwa akses Gmail diberikan secara sadar
+          melalui OAuth Google dan digunakan hanya untuk fungsi pengelolaan inbox.
+        </p>
+        <p>
+          Pengguna bertanggung jawab atas akun Google yang dipakai untuk login. Developer dapat
+          mengubah atau menghentikan layanan aplikasi sewaktu-waktu untuk keperluan pemeliharaan
+          atau keamanan.
+        </p>
+      </LegalPage>
+    );
+  }
+
+  if (!loading && !isAuthenticated) {
+    return <PublicLanding onLogin={handleLogin} error={error} notice={notice} />;
+  }
+
   return (
     <div className="app-layout">
       <Sidebar
@@ -244,33 +374,6 @@ function App() {
           {error && (
             <div style={{ textAlign: 'center', padding: '40px', color: '#ef4444' }}>
               Terjadi kesalahan: {error}
-            </div>
-          )}
-
-          {!loading && !error && !isAuthenticated && (
-            <div style={{ textAlign: 'center', padding: '60px' }}>
-              <div style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>Hubungkan Akun Google</div>
-              <div style={{ color: 'var(--text-secondary)', marginBottom: 12 }}>
-                Login Google dibutuhkan agar aplikasi bisa membaca inbox Gmail Anda secara aman.
-              </div>
-              <div style={{ color: 'var(--text-muted)', marginBottom: 32, fontSize: 14 }}>
-                Pastikan `REDIRECT_URL` di Google Cloud Console sama persis dengan URL callback aplikasi.
-              </div>
-              <button
-                onClick={handleLogin}
-                style={{
-                  padding: '12px 24px',
-                  background: 'white',
-                  color: 'black',
-                  border: 'none',
-                  borderRadius: 8,
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  fontSize: 16,
-                }}
-              >
-                Login dengan Google
-              </button>
             </div>
           )}
 
