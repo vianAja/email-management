@@ -27,8 +27,8 @@ Karena Vercel bersifat serverless, session auth tidak boleh bergantung pada memo
 Gunakan `.env.example` sebagai template. Variable yang perlu Anda isi:
 
 ```env
-GOOGLE_OAUTH_CLIENT_ID=
-GOOGLE_OAUTH_CLIENT_SECRET=
+CLIENT_ID=
+CLIENT_SECRET=
 SESSION_SECRET=
 APP_BASE_URL=
 REDIRECT_URL=
@@ -36,8 +36,8 @@ REDIRECT_URL=
 
 Arti masing-masing:
 
-- `GOOGLE_OAUTH_CLIENT_ID`: OAuth client ID dari Google Cloud
-- `GOOGLE_OAUTH_CLIENT_SECRET`: OAuth client secret dari Google Cloud
+- `CLIENT_ID`: OAuth client ID dari Google Cloud
+- `CLIENT_SECRET`: OAuth client secret dari Google Cloud
 - `SESSION_SECRET`: secret panjang acak untuk signing cookie session
 - `APP_BASE_URL`: URL frontend utama aplikasi
 - `REDIRECT_URL`: callback Google OAuth
@@ -56,8 +56,8 @@ VITE_PORT=5173
 
 Saat nanti Anda membuat project di Vercel, isi environment variables ini di Project Settings:
 
-- `GOOGLE_OAUTH_CLIENT_ID`
-- `GOOGLE_OAUTH_CLIENT_SECRET`
+- `CLIENT_ID`
+- `CLIENT_SECRET`
 - `SESSION_SECRET`
 - `APP_BASE_URL`
 - `REDIRECT_URL`
@@ -65,8 +65,8 @@ Saat nanti Anda membuat project di Vercel, isi environment variables ini di Proj
 Contoh production:
 
 ```env
-APP_BASE_URL=https://your-app.vercel.app
-REDIRECT_URL=https://your-app.vercel.app/api/auth/callback
+APP_BASE_URL=https://email.najwan.my.id
+REDIRECT_URL=https://email.najwan.my.id/api/auth/callback
 ```
 
 ## Catatan Penting untuk Google OAuth di Vercel
@@ -80,6 +80,42 @@ Rekomendasi praktis:
 
 1. Gunakan login Google hanya pada domain production atau custom domain yang stabil.
 2. Daftarkan `https://your-domain.com/api/auth/callback` di Google Cloud Console.
+
+## Konfigurasi Google Console untuk Domain Custom
+
+Kalau domain production Anda adalah `https://email.najwan.my.id`, maka untuk OAuth Client tipe `Web application` isi seperti ini:
+
+- `Authorized JavaScript origins`
+- `https://email.najwan.my.id`
+
+- `Authorized redirect URIs`
+- `https://email.najwan.my.id/api/auth/callback`
+
+Kalau Anda juga ingin menyimpan fallback domain Vercel bawaan, Anda boleh tambahkan juga:
+
+- `https://email-management-dhs8.vercel.app`
+- `https://email-management-dhs8.vercel.app/api/auth/callback`
+
+Tetapi untuk penggunaan utama, saya sarankan fokus ke domain custom saja agar `APP_BASE_URL` dan `REDIRECT_URL` konsisten.
+
+## Rekomendasi Env di Vercel
+
+Untuk environment `Production`:
+
+```env
+CLIENT_ID=...
+CLIENT_SECRET=...
+SESSION_SECRET=...
+APP_BASE_URL=https://email.najwan.my.id
+REDIRECT_URL=https://email.najwan.my.id/api/auth/callback
+```
+
+Untuk environment `Preview`, ada dua pilihan:
+
+1. Biarkan login Google tidak dipakai di preview, karena preview URL berubah-ubah dan Google OAuth butuh redirect URI yang exact.
+2. Kalau tetap ingin preview bisa login, Anda harus mendaftarkan URL preview yang exact ke Google Console, yang biasanya tidak praktis.
+
+Karena itu, untuk kasus Anda saya lebih menyarankan login Google difokuskan ke `Production` di domain custom.
 
 ## Menjalankan Secara Lokal
 
