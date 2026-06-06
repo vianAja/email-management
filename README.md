@@ -176,6 +176,30 @@ git rm --cached .env .key.json
 - `POST /api/auth/logout`
 - `GET /api/emails`
 
+## Batasan Gmail API Saat Ini
+
+Scope Gmail yang dipakai aplikasi saat ini adalah `https://www.googleapis.com/auth/gmail.readonly`.
+
+Artinya:
+
+- aplikasi bisa membaca email
+- aplikasi tidak bisa menghapus email
+- aplikasi tidak bisa memindahkan email ke trash
+- aplikasi tidak bisa menandai read/unread atau mengubah label
+
+Kalau ingin aksi mailbox, scope minimal yang biasanya dibutuhkan adalah:
+
+- `https://www.googleapis.com/auth/gmail.modify` untuk trash, ubah label, mark read/unread
+- `https://mail.google.com/` untuk delete permanen
+
+Untuk mengambil "semua email", SSO saja tidak cukup. Yang dibutuhkan adalah:
+
+1. Google OAuth untuk login dan consent user
+2. Gmail API untuk akses data mailbox
+3. Pagination `users.messages.list` dengan `pageToken` agar seluruh mailbox bisa diambil bertahap
+
+Jadi Anda tidak perlu API pihak ketiga lain, tetapi tetap perlu Gmail API dengan scope yang sesuai.
+
 ## Referensi Resmi
 
 - Vite on Vercel: `https://vercel.com/docs/frameworks/frontend/vite`
